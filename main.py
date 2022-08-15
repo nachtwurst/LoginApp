@@ -11,6 +11,8 @@ class LoginApp:
 
         root.title("Login")
         root.geometry('300x300')
+        root.maxsize(300, 300)
+        root.minsize(300, 300)
 
         # upper_window contains "Username" and "Password" text and their associated Entry fields, stacked vertically
         self.upper_window = ttk.Frame(root, padding='0.35i')
@@ -56,6 +58,13 @@ class LoginApp:
                                      font=('Arial', 10, 'bold')).grid(column=0, row=0, padx=10)
         self.lower_window.pack()
 
+    def main_app_page(self, root, username):
+
+        main_app_window = ttk.Frame(root)
+        main_app_label = Label(main_app_window, text=f"Welcome, {username}!", font=('Arial', 16), pady=20)
+        main_app_label.pack()
+        main_app_window.pack()
+
     # returns True if username is found in the user database dictionary
     def check_users(self, username):
         username_list = [name for name in self.users.keys()]
@@ -78,8 +87,11 @@ class LoginApp:
         password = self.login_field_password.get()
         if username and password and self.check_users(username):
             if self.check_password(username, password):
+                self.upper_window.destroy()
+                self.lower_window.destroy()
                 self.logged_in = True
                 print("Logged in!")
+                self.main_app_page(root, username)
             else:
                 print("Incorrect password. Please try again.")
         elif username and password and not self.check_users(username):
